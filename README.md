@@ -1,3 +1,8 @@
+# Work in progress
+This project is still a work in progress and not ready to be used.
+
+
+
 # Java Discord Webhook
 Execute Discord webhooks in Java.
 
