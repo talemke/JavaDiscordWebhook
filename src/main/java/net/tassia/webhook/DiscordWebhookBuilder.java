@@ -1,127 +1,107 @@
 package net.tassia.webhook;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * This class is responsible for building and executing a webhook.
  */
 public class DiscordWebhookBuilder {
 
-    @JsonIgnore private final DiscordWebhook webhook;
+    private final DiscordWebhook webhook;
+    private final ObjectMapper mapper;
     private String content = null;
     private String username = null;
-    private String avatar_url = null;
+    private String avatarUrl = null;
     private boolean tts = false;
+    private final Collection<DiscordEmbed> embeds = new ArrayList<>();
 
-
-
-    DiscordWebhookBuilder(DiscordWebhook webhook) {
-        if (webhook == null) throw new NullPointerException();
+    DiscordWebhookBuilder(DiscordWebhook webhook, ObjectMapper mapper) {
+        if (webhook == null || mapper == null) throw new NullPointerException();
         this.webhook = webhook;
+        this.mapper = mapper;
     }
 
+    @JsonIgnore
+    public String getJSON() throws JsonProcessingException {
+        return mapper.writeValueAsString(this);
+    }
 
+    @JsonIgnore
+    public String getPrettyJSON() throws JsonProcessingException {
+        return mapper.writerWithDefaultPrettyPrinter().writeValueAsString(this);
+    }
 
+    @JsonIgnore
     public void execute() throws IOException {
-        URL url = new URL("https://discordapp.com/api/webhooks/" + webhook.getID() + "/" + webhook.getToken());
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
-        connection.setRequestMethod("POST");
-        connection.setInstanceFollowRedirects(true);
-        connection.setRequestProperty("User-Agent", "TASSIA710/JavaDiscordWebhook@1.0.0");
-
-        byte[] payload = new ObjectMapper().writeValueAsString(this).getBytes(StandardCharsets.UTF_8);
-        connection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-        connection.setDoOutput(true);
-        connection.getOutputStream().write(payload);
-        connection.getOutputStream().flush();
-        connection.getOutputStream().close();
-
-        int code = connection.getResponseCode();
-        byte[] response;
-        if (code > 299) {
-            response = connection.getErrorStream().readAllBytes();
-        } else {
-            response = connection.getInputStream().readAllBytes();
-        }
-        String status = connection.getResponseMessage();
-        String message = new String(response, StandardCharsets.UTF_8);
-        connection.disconnect();
-
-        System.out.println(code + " " + connection.getResponseMessage());
-        System.out.println(new String(payload));
-
-        if (code != 204) {
-            throw new IllegalStateException("Received " + status + " " + status + "\n\n" + message);
-        }
+        webhook.execute(getPrettyJSON());
     }
-
-
 
     public DiscordWebhookBuilder withContent(String content) {
         this.content = content;
         return this;
     }
 
-
-
+    @JsonProperty("content")
     public String getContent() {
         return content;
     }
-
-
 
     public DiscordWebhookBuilder withUsername(String username) {
         this.username = username;
         return this;
     }
 
-
-
+    @JsonProperty("username")
     public String getUsername() {
         return username;
     }
 
-
-
     public DiscordWebhookBuilder withAvatarURL(String avatarUrl) {
-        this.avatar_url = avatarUrl;
+        this.avatarUrl = avatarUrl;
         return this;
     }
 
-
-
+    @JsonProperty("avatar_url")
     public String getAvatarURL() {
-        return avatar_url;
+        return avatarUrl;
     }
-
-
 
     public DiscordWebhookBuilder withTTS(boolean tts) {
         this.tts = tts;
         return this;
     }
 
-
-
+    @JsonProperty("tts")
     public boolean isTTS() {
         return tts;
     }
-
-
 
     // TODO: With file
 
     // TODO: Get files
 
-    // TODO: With embed
+    public DiscordWebhookBuilder withEmbed(DiscordEmbed embed) {
+        if (embed == null) throw new NullPointerException("Embed cannot be null.");
+        embeds.add(embed);
+        return this;
+    }
 
-    // TODO: Get embeds
+    public DiscordWebhookBuilder withEmbeds(DiscordEmbed...embeds) {
+        this.embeds.addAll(Arrays.asList(embeds));
+        return this;
+    }
+
+    @JsonProperty("embeds")
+    public Collection<DiscordEmbed> getEmbeds() {
+        return embeds;
+    }
 
 }

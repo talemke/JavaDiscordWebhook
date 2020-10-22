@@ -51,6 +51,6 @@ SOFTWARE.
 
 ```
 
-### Related Projcts
+### Related Projects
 
 - [PHP-Discord-Webhooks](https://github.com/TASSIA710/PHP-Discord-Webhooks)
