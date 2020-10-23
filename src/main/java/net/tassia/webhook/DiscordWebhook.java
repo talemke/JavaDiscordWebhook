@@ -2,10 +2,7 @@ package net.tassia.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -79,6 +76,15 @@ public class DiscordWebhook implements DiscordConstants {
     public void execute(String jsonPayload) throws IOException {
         String url = "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
         new SimpleRest().execute(url, "POST", jsonPayload, "application/json");
+    }
+
+    /**
+     * Deletes this webhook.
+     * @throws IOException if an I/O error occurs
+     */
+    public void delete() throws IOException {
+        String url = "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
+        new SimpleRest().execute(url, "DELETE", null, null);
     }
 
 }
