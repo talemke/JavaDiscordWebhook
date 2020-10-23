@@ -22,7 +22,7 @@ try {
 
 ### Embeds
 ```java
-new DiscordWebhook("https://discordapp.com/api/webhooks/715304788685881475/wV8daP1HhbC-RNjTRel-orJjC7OCy4FrEjpfOhFrtyQ1AZEfIG4bbbR_f9sqQAOhv0ga").builder()
+new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").builder()
     .withContent("Cool message!")
     .withAvatarURL("https://avatars1.githubusercontent.com/u/38081490")
     .withTTS(false)
