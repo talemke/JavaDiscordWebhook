@@ -1,5 +1,8 @@
 package net.tassia.webhook;
 
+/**
+ * Contains all constants for Discord webhooks. Mostly contains all the limits.
+ */
 public interface DiscordConstants {
 
     /**
