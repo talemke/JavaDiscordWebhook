@@ -77,36 +77,8 @@ public class DiscordWebhook implements DiscordConstants {
      * @throws IOException if an I/O error occurs
      */
     public void execute(String jsonPayload) throws IOException {
-        URL url = new URL("https://discordapp.com/api/webhooks/" + getID() + "/" + getToken());
-        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-
-        connection.setRequestMethod("POST");
-        connection.setInstanceFollowRedirects(true);
-        connection.setRequestProperty("User-Agent", "TASSIA710/JavaDiscordWebhook@1.0.0");
-        connection.setRequestProperty("Content-Type", "application/json; charset=utf8");
-
-        connection.setDoOutput(true);
-        connection.getOutputStream().write(jsonPayload.getBytes(StandardCharsets.UTF_8));
-        connection.getOutputStream().flush();
-        connection.getOutputStream().close();
-
-        int code = connection.getResponseCode();
-        byte[] response;
-        if (code > 299) {
-            response = connection.getErrorStream().readAllBytes();
-        } else {
-            response = connection.getInputStream().readAllBytes();
-        }
-        String status = connection.getResponseMessage();
-        String message = new String(response, StandardCharsets.UTF_8);
-        connection.disconnect();
-
-        System.out.println(jsonPayload);
-        System.out.println(code + " " + connection.getResponseMessage());
-
-        if (code != 204) {
-            throw new IllegalStateException("Received " + code + " " + status + "\n\nResponse:\n" + message);
-        }
+        String url = "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
+        new SimpleRest().execute(url, "POST", jsonPayload, "application/json");
     }
 
 }
