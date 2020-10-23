@@ -10,7 +10,7 @@ import java.util.Collection;
 /**
  * This class represents an embed.
  */
-public class DiscordEmbed {
+public class DiscordEmbed implements DiscordConstants {
 
     private String title = null;
     private String description = null;
@@ -28,7 +28,10 @@ public class DiscordEmbed {
         return title;
     }
 
-    public DiscordEmbed setTitle(String title) {
+    public DiscordEmbed setTitle(String title) throws IllegalArgumentException {
+        if (title.length() > LIMIT_EMBED_TITLE) {
+            throw new IllegalArgumentException("Title is too long (max. " + LIMIT_EMBED_TITLE + ")");
+        }
         this.title = title;
         return this;
     }
@@ -38,7 +41,10 @@ public class DiscordEmbed {
         return description;
     }
 
-    public DiscordEmbed setDescription(String description) {
+    public DiscordEmbed setDescription(String description) throws IllegalArgumentException {
+        if (description.length() > LIMIT_EMBED_DESCRIPTION) {
+            throw new IllegalArgumentException("Description is too long (max. " + LIMIT_EMBED_DESCRIPTION + ")");
+        }
         this.description = description;
         return this;
     }
@@ -190,8 +196,8 @@ public class DiscordEmbed {
         }
 
         public Footer(String text, String iconUrl) {
-            this.text = text;
-            this.iconUrl = iconUrl;
+            setText(text);
+            setIconUrl(iconUrl);
         }
 
         @JsonProperty("text")
@@ -200,6 +206,9 @@ public class DiscordEmbed {
         }
 
         public Footer setText(String text) {
+            if (text.length() > LIMIT_FOOTER) {
+                throw new IllegalArgumentException("Footer is too long (max. " + LIMIT_FOOTER + ")");
+            }
             this.text = text;
             return this;
         }
@@ -226,7 +235,7 @@ public class DiscordEmbed {
         // private int width;
 
         public Image(String url) {
-            this.url = url;
+            setUrl(url);
         }
 
         @JsonProperty("url")
@@ -251,7 +260,7 @@ public class DiscordEmbed {
         // private int width;
 
         public Thumbnail(String url) {
-            this.url = url;
+            setUrl(url);
         }
 
         @JsonProperty("url")
@@ -280,9 +289,9 @@ public class DiscordEmbed {
         }
 
         public Author(String name, String url, String iconUrl) {
-            this.name = name;
-            this.url = url;
-            this.iconUrl = iconUrl;
+            setName(name);
+            setUrl(url);
+            setIconUrl(iconUrl);
         }
 
         @JsonProperty("name")
@@ -291,6 +300,9 @@ public class DiscordEmbed {
         }
 
         public Author setName(String name) {
+            if (name.length() > LIMIT_AUTHOR) {
+                throw new IllegalArgumentException("Author name is too long (max. " + LIMIT_AUTHOR + ")");
+            }
             this.name = name;
             return this;
         }
@@ -330,9 +342,9 @@ public class DiscordEmbed {
         }
 
         public Field(String name, String value, boolean inline) {
-            this.name = name;
-            this.value = value;
-            this.inline = inline;
+            setName(name);
+            setValue(value);
+            setInline(inline);
         }
 
         @JsonProperty("name")
@@ -340,7 +352,10 @@ public class DiscordEmbed {
             return name;
         }
 
-        public Field setName(String name) {
+        public Field setName(String name) throws IllegalArgumentException {
+            if (name.length() > LIMIT_FIELD_NAME) {
+                throw new IllegalArgumentException("Field name is too long (max. " + LIMIT_FIELD_NAME + ")");
+            }
             this.name = name;
             return this;
         }
@@ -350,7 +365,10 @@ public class DiscordEmbed {
             return value;
         }
 
-        public Field setValue(String value) {
+        public Field setValue(String value) throws IllegalArgumentException {
+            if (value.length() > LIMIT_FIELD_VALUE) {
+                throw new IllegalArgumentException("Field value is too long (max. " + LIMIT_FIELD_VALUE + ")");
+            }
             this.value = value;
             return this;
         }

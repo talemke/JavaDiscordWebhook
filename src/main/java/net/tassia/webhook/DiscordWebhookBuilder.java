@@ -13,7 +13,7 @@ import java.util.Collection;
 /**
  * This class is responsible for building and executing a webhook.
  */
-public class DiscordWebhookBuilder {
+public class DiscordWebhookBuilder implements DiscordConstants {
 
     private final DiscordWebhook webhook;
     private final ObjectMapper mapper;
@@ -45,6 +45,9 @@ public class DiscordWebhookBuilder {
     }
 
     public DiscordWebhookBuilder withContent(String content) {
+        if (content.length() > LIMIT_CONTENT) {
+            throw new IllegalArgumentException("Content is too long (max. " + LIMIT_CONTENT + ")");
+        }
         this.content = content;
         return this;
     }
@@ -89,12 +92,18 @@ public class DiscordWebhookBuilder {
     // TODO: Get files
 
     public DiscordWebhookBuilder withEmbed(DiscordEmbed embed) {
+        if (this.embeds.size() >= LIMIT_EMBEDS) {
+            throw new IllegalArgumentException("Too many embeds. (max. " + LIMIT_EMBEDS + ")");
+        }
         if (embed == null) throw new NullPointerException("Embed cannot be null.");
         embeds.add(embed);
         return this;
     }
 
     public DiscordWebhookBuilder withEmbeds(DiscordEmbed...embeds) {
+        if (this.embeds.size() + embeds.length > LIMIT_EMBEDS) {
+            throw new IllegalArgumentException("Too many embeds. (max. " + LIMIT_EMBEDS + ")");
+        }
         this.embeds.addAll(Arrays.asList(embeds));
         return this;
     }
