@@ -42,6 +42,11 @@ new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").builder()
     .execute();
 ```
 
+### Delete a webhook
+```java
+new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").delete();
+```
+
 
 
 ## Other
