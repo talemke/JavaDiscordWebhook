@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.regex.Matcher;
@@ -130,6 +129,11 @@ public class DiscordWebhook {
         return new DiscordWebhookBuilder(this, mapper);
     }
 
+    /**
+     * Sends a JSON payload to this webhook using a POST method.
+     * @param jsonPayload the payload
+     * @throws IOException if an I/O error occurs
+     */
     public void execute(String jsonPayload) throws IOException {
         URL url = new URL("https://discordapp.com/api/webhooks/" + getID() + "/" + getToken());
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
