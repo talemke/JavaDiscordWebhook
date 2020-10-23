@@ -20,6 +20,28 @@ try {
 }
 ```
 
+### Embeds
+```java
+new DiscordWebhook("https://discordapp.com/api/webhooks/715304788685881475/wV8daP1HhbC-RNjTRel-orJjC7OCy4FrEjpfOhFrtyQ1AZEfIG4bbbR_f9sqQAOhv0ga").builder()
+    .withContent("Cool message!")
+    .withAvatarURL("https://avatars1.githubusercontent.com/u/38081490")
+    .withTTS(false)
+    .withUsername("JavaDiscordWebhook")
+    .withEmbed(new DiscordEmbed()
+            .setTitle("Cool title!")
+            .setDescription("Big description! :O")
+            .setUrl("https://github.com")
+            .setFooter("Nice footer", "https://avatars1.githubusercontent.com/u/583231")
+            .setImage("https://avatars1.githubusercontent.com/u/583231")
+            .setThumbnail("https://avatars1.githubusercontent.com/u/583231")
+            .setAuthor("TASSIA")
+            .setColor(Color.RED)
+            .setTimestamp(System.currentTimeMillis())
+            .addField("Field 1", "Value 1")
+    )
+    .execute();
+```
+
 
 
 ## Other
