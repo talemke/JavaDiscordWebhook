@@ -1,6 +1,7 @@
 package net.tassia.webhook;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import okhttp3.*;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -11,9 +12,12 @@ import java.util.regex.Pattern;
  */
 public class DiscordWebhook implements DiscordConstants {
 
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+
     private final long id;
     private final String token;
     private final ObjectMapper mapper;
+    private final OkHttpClient client;
 
     /**
      * Creates a new Discord webhook object with the given URL.
@@ -31,6 +35,7 @@ public class DiscordWebhook implements DiscordConstants {
         this.id = Long.parseLong(matcher.group(1));
         this.token = matcher.group(2);
         this.mapper = new ObjectMapper();
+        this.client = new OkHttpClient();
     }
 
     /**
@@ -42,6 +47,7 @@ public class DiscordWebhook implements DiscordConstants {
         this.id = id;
         this.token = token;
         this.mapper = new ObjectMapper();
+        this.client = new OkHttpClient();
     }
 
     /**
@@ -69,13 +75,25 @@ public class DiscordWebhook implements DiscordConstants {
     }
 
     /**
+     * Returns the URL of this webhook.
+     * @return the URL
+     */
+    public String getURL() {
+        return "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
+    }
+
+    /**
      * Sends a JSON payload to this webhook using a POST method.
      * @param jsonPayload the payload
      * @throws IOException if an I/O error occurs
      */
     public void execute(String jsonPayload) throws IOException {
-        String url = "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
-        new SimpleRest().execute(url, "POST", jsonPayload, "application/json");
+        RequestBody body = RequestBody.create(jsonPayload, JSON);
+        Request request = new Request.Builder().url(getURL()).post(body).build();
+        Response response = client.newCall(request).execute();
+        if (response.code() != 204) {
+            throw new IOException("Unexpected response: " + response.code());
+        }
     }
 
     /**
@@ -83,8 +101,41 @@ public class DiscordWebhook implements DiscordConstants {
      * @throws IOException if an I/O error occurs
      */
     public void delete() throws IOException {
-        String url = "https://discordapp.com/api/webhooks/" + getID() + "/" + getToken();
-        new SimpleRest().execute(url, "DELETE", null, null);
+        Request request = new Request.Builder().url(getURL()).delete().build();
+        Response response = client.newCall(request).execute();
+        if (response.code() != 204) {
+            throw new IOException("Unexpected response: " + response.code());
+        }
+    }
+
+    private void applySettings(Object update) throws IOException {
+        String json = mapper.writeValueAsString(update);
+        RequestBody body = RequestBody.create(json, JSON);
+        Request request = new Request.Builder().url(getURL()).patch(body).build();
+        Response response = client.newCall(request).execute();
+        if (response.code() != 20) {
+            ResponseBody responseBody = response.body();
+            if (responseBody != null) {
+                throw new IOException("Unexpected response: " + response.code() + "\n\n" + responseBody.string());
+            } else {
+                throw new IOException("Unexpected response: " + response.code());
+            }
+        }
+    }
+
+    /**
+     * Sets the default name of this webhook.
+     * @param name the name
+     * @throws IOException if an I/O error occurs
+     */
+    public void setName(String name) throws IOException {
+        UpdateNameJson data = new UpdateNameJson();
+        data.name = name;
+        applySettings(data);
+    }
+
+    private static class UpdateNameJson {
+        public String name = null;
     }
 
 }

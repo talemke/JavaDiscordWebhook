@@ -55,7 +55,7 @@ public class DiscordWebhookBuilder implements DiscordConstants {
      */
     @JsonIgnore
     public void execute() throws IOException {
-        webhook.execute(getPrettyJSON());
+        webhook.execute(getJSON());
     }
 
     /**
