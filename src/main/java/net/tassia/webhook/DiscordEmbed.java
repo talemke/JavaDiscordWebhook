@@ -175,11 +175,17 @@ public class DiscordEmbed implements DiscordConstants {
     }
 
     public DiscordEmbed setFields(Collection<Field> fields) {
+        if (fields.size() > DiscordWebhook.LIMIT_EMBED_FIELDS) {
+            throw new IllegalArgumentException("Embed has too many fields. (max. " + LIMIT_EMBED_FIELDS + ")");
+        }
         this.fields = fields;
         return this;
     }
 
     public DiscordEmbed addField(Field field) {
+        if (fields.size() >= DiscordWebhook.LIMIT_EMBED_FIELDS) {
+            throw new IllegalArgumentException("Embed has too many fields. (max. " + LIMIT_EMBED_FIELDS + ")");
+        }
         fields.add(field);
         return this;
     }
