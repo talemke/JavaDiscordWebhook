@@ -4,13 +4,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.awt.Color;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * This class represents an embed.
  */
 public class DiscordEmbed implements DiscordConstants {
+
+    private static final DateFormat ISO_DATE_FORMAT;
+    static {
+        ISO_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        ISO_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
     private String title = null;
     private String description = null;
@@ -61,8 +71,7 @@ public class DiscordEmbed implements DiscordConstants {
 
     @JsonProperty("timestamp")
     public String getTimestampAsString() {
-        // return DateTimeFormatter.ISO_DATE_TIME.format(new Date(getTimestamp()).toInstant()); FIXME
-        return "";
+        return ISO_DATE_FORMAT.format(new Date(timestamp));
     }
 
     @JsonIgnore
