@@ -50,6 +50,11 @@ new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").builder()
 new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").delete();
 ```
 
+### Renaming a webhook
+```java
+new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").setName("Sherlock Holmes");
+```
+
 
 
 ## Download
