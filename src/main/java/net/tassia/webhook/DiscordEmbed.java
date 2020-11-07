@@ -25,7 +25,7 @@ public class DiscordEmbed implements DiscordConstants {
     private String title = null;
     private String description = null;
     private String url = null;
-    private long timestamp = 0L;
+    private long timestamp = -1L;
     private Color color = null;
     private Footer footer = null;
     private Image image = null;
@@ -71,7 +71,11 @@ public class DiscordEmbed implements DiscordConstants {
 
     @JsonProperty("timestamp")
     public String getTimestampAsString() {
-        return ISO_DATE_FORMAT.format(new Date(timestamp));
+        if (timestamp >= 0) {
+            return ISO_DATE_FORMAT.format(new Date(timestamp));
+        } else {
+            return null;
+        }
     }
 
     @JsonIgnore
