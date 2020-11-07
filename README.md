@@ -49,6 +49,29 @@ new DiscordWebhook("https://discordapp.com/api/webhooks/{id}/{token}").delete();
 
 
 
+## Download
+
+### Maven
+
+Add the following repository and dependency to your `pom.xml`:
+
+```xml
+<repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+</repository>
+```
+
+```xml
+<dependency>
+    <groupId>com.github.TASSIA710</groupId>
+    <artifactId>JavaDiscordWebhook</artifactId>
+    <version>0.0.3</version>
+</dependency>
+```
+
+
+
 ## Other
 
 ### License
