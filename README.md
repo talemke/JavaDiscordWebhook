@@ -1,4 +1,8 @@
 # Java Discord Webhook
+
+[![](https://jitpack.io/v/TASSIA710/JavaDiscordWebhook.svg)](https://jitpack.io/#TASSIA710/JavaDiscordWebhook)
+[![](https://img.shields.io/github/license/TASSIA710/JavaDiscordWebhook)](https://github.com/TASSIA710/JavaDiscordWebhook/blob/main/LICENSE)
+
 Execute Discord webhooks in Java.
 
 
