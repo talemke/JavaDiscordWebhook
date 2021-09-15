@@ -1,3 +1,9 @@
+# Discontinued
+
+This project is no-longer maintained. A continued and maintained version of this project is available at [TASSIA710/diskord-webhooks](https://github.com/TASSIA710/diskord-webhooks) (updated as a Kotlin multiplatform library).
+
+
+
 # Java Discord Webhook
 
 [![](https://jitpack.io/v/TASSIA710/JavaDiscordWebhook.svg)](https://jitpack.io/#TASSIA710/JavaDiscordWebhook)
